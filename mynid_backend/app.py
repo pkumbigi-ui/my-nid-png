@@ -5,8 +5,15 @@ from flask_cors import CORS
 import os
 
 def create_app():
-    app = Flask(__name__)
-    app.config.from_object('config.Config')
+    # 👇 set static folder to serve Flutter build
+    app = Flask(__name__, static_folder="static")
+
+    # 🔹 Use Render PostgreSQL URL from environment
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+        'DATABASE_URL',
+        'postgresql://postgres:password@localhost:5432/mynid_db'  # fallback for local testing
+    )
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     # 🔹 Define and store upload path
     UPLOAD_FOLDER = 'static/uploads/biometrics'
@@ -57,8 +64,17 @@ def create_app():
     def health():
         return {
             "status": "healthy",
-            "upload_dir": app.config['UPLOAD_FOLDER']
+            "upload_dir": app.config['UPLOAD_FOLDER'],
+            "database": app.config['SQLALCHEMY_DATABASE_URI']
         }
+
+    # 🔹 Serve Flutter web build (fallback for SPA)
+    @app.route('/', defaults={'path': ''})
+    @app.route('/<path:path>')
+    def serve_flutter(path):
+        if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+            return send_from_directory(app.static_folder, path)
+        return send_from_directory(app.static_folder, 'index.html')
 
     # Create tables
     with app.app_context():
@@ -72,5 +88,8 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)), debug=True)
+
+# For production deployment (Gunicorn)
+application = create_app()
 
