@@ -1,1 +1,28 @@
+services:
+  - type: web
+    name: mynid-png-app
+    env: python
+    region: oregon  # change to your preferred region
+    plan: starter
+    buildCommand: |
+      echo "🔹 Installing Python dependencies"
+      pip install -r requirements.txt
+      echo "🔹 Building Flutter web app"
+      flutter config --enable-web
+      flutter pub get
+      flutter build web --release
+      # Copy the build output to Flask static folder
+      mkdir -p static
+      cp -r build/web/* static/
+    startCommand: gunicorn app:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DATABASE_URL
+        sync: true
+        fromDatabase:
+          name: mynid-png-db   # your Render PostgreSQL database
+          property: connectionString
+    autoDeploy: true
+    routes:
+      - type: web
+        path: /*
 
