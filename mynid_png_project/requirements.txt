@@ -6,6 +6,6 @@ gunicorn==22.0.0
 Werkzeug==3.0.1
 psycopg2-binary==2.9.9
 bcrypt==4.1.2
-python-dotenv==1.0.0  # If using .env files
-python-multipart==0.0.9  # If handling file uploads
-Pillow==10.1.0  # If processing images
+python-dotenv==1.0.0
+python-multipart==0.0.9
+Pillow==10.1.0
