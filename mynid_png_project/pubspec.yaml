@@ -1,0 +1,74 @@
+name: mynid_png_project
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.8.1 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  syncfusion_flutter_charts: ^26.1.40
+  intl: ^0.19.0
+  url_launcher: ^6.3.1
+  cupertino_icons: ^1.0.8
+  provider: ^6.1.5
+  http: ^1.1.0
+  xml: ^6.5.0
+  webview_flutter: ^4.7.0
+  marquee: ^2.2.3
+  jwt_decoder: ^2.0.1
+  shared_preferences: ^2.2.2
+  collection: ^1.17.2
+  image_picker: ^1.0.4
+  path_provider: ^2.1.1
+  path: ^1.8.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/national_emblem.png
+    - assets/images/nid_logo.png
+    - assets/images/welcome_bg.png
+    - assets/images/nid_card_sample.png
+    - assets/images/nid_office.png
+    - assets/images/mynid_bg.png
+    - assets/images/admin_bg.png
+    - assets/images/admin_bg2.png
+    - assets/images/admin_bg3.png
+    - assets/images/highlands_area.png
+    - assets/images/coastal_areas.png
+    - assets/images/png_map2.png
+    - assets/images/png_map.png
+    - assets/images/happy_user.png
+    - assets/images/NID PROJECT Rollout.png
+    - assets/images/2019 PNGCIR REPORT.png
+    - assets/images/Our Vision for the Project.png
+    - assets/images/Partnership for Rollout in Private Sector.png
+    - assets/images/news_postcourier1.png
+    - assets/images/news_postcourier2.png
+    - assets/images/news_postcourier3.png
+    - assets/images/news_postcourier4.png
+    - assets/images/news_postcourier5.png
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  web:
+    generate: true
+    image_path: "assets/icons/my_nid.png"
+  windows:
+    generate: true
+    image_path: "assets/icons/my_nid.png"
+  macos:
+    generate: true
+    image_path: "assets/icons/my_nid.png"
+  image_path: "assets/icons/my_nid.png"

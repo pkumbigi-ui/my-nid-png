@@ -1,0 +1,5 @@
+/mynid_png_project/build/
+/__pycache__/
+/venv/
+/.env
+*.pyc
