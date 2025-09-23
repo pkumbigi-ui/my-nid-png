@@ -1,13 +1,7 @@
-# wsgi.py - FIXED IMPORT PATH
-import sys
-import os
+# mynid_backend/wsgi.py
+from app import create_app  # works because wsgi.py and app.py are in the same folder
 
-# Add the parent directory to Python path
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-from app import create_app
-from mynid_backend import app  # Import your Flask app
-application = create_app()
+app = create_app()
 
 if __name__ == "__main__":
-    application.run()
+    app.run(host="0.0.0.0", port=5000, debug=True)
