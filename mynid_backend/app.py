@@ -4,7 +4,7 @@ from flask_cors import CORS
 import os
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder="frontend", static_url_path="")
 
     # ✅ Use DATABASE_URL from environment (Render sets it) and psycopg2
     database_url = os.getenv(
@@ -42,18 +42,19 @@ def create_app():
     app.register_blueprint(application_bp, url_prefix="/api")
     app.register_blueprint(admin_bp, url_prefix="/api/admin")
 
-    # ✅ Home route for Render so / doesn't return 404
-    @app.route("/")
-    def home():
-        return {
-            "message": "Welcome to MyNID PNG API",
-            "status": "running"
-        }
-
     # Serve uploaded biometric files
     @app.route("/static/uploads/biometrics/<filename>")
     def uploaded_biometric_file(filename):
         return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
+
+    # Serve Flutter frontend
+    @app.route("/", defaults={"path": ""})
+    @app.route("/<path:path>")
+    def serve_frontend(path):
+        if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+            return send_from_directory(app.static_folder, path)
+        else:
+            return send_from_directory(app.static_folder, "index.html")
 
     # Debug: List all routes
     @app.route("/routes")
@@ -88,4 +89,5 @@ def create_app():
 if __name__ == "__main__":
     app = create_app()
     app.run(host="0.0.0.0", port=5000, debug=True)
+
 
