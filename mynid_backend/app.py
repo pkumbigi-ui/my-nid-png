@@ -3,7 +3,6 @@ from extensions import db
 from flask_cors import CORS
 import os
 
-
 def create_app():
     app = Flask(__name__)
 
@@ -43,6 +42,14 @@ def create_app():
     app.register_blueprint(application_bp, url_prefix="/api")
     app.register_blueprint(admin_bp, url_prefix="/api/admin")
 
+    # ✅ Home route for Render so / doesn't return 404
+    @app.route("/")
+    def home():
+        return {
+            "message": "Welcome to MyNID PNG API",
+            "status": "running"
+        }
+
     # Serve uploaded biometric files
     @app.route("/static/uploads/biometrics/<filename>")
     def uploaded_biometric_file(filename):
@@ -77,7 +84,6 @@ def create_app():
             print(f"📁 Upload directory: {app.config['UPLOAD_FOLDER']}")
 
     return app
-
 
 if __name__ == "__main__":
     app = create_app()
