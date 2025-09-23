@@ -1,14 +1,13 @@
-# app.py
 from flask import Flask, send_from_directory
 from extensions import db
 from flask_cors import CORS
 import os
 
 def create_app():
-    # Serve Flutter web build from "frontend" folder
-    app = Flask(__name__, static_folder="frontend", static_url_path="")
+    # Serve Flutter web from build/web
+    app = Flask(__name__, static_folder="build/web", static_url_path="")
 
-    # ✅ Use DATABASE_URL from environment (Render sets it) with psycopg2
+    # ✅ Use DATABASE_URL from environment (Render sets it) and psycopg2
     database_url = os.getenv(
         "DATABASE_URL",
         "postgresql+psycopg2://mynid_user:Lir6Xa30ju3G73gEaH4RQj2HZzAwVBor@dpg-d38meuux433s73fmc5m0-a.render.com:5432/mynid?sslmode=require"
@@ -49,15 +48,6 @@ def create_app():
     def uploaded_biometric_file(filename):
         return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
 
-    # Health check
-    @app.route("/health")
-    def health():
-        return {
-            "status": "healthy",
-            "upload_dir": app.config["UPLOAD_FOLDER"],
-            "database": app.config["SQLALCHEMY_DATABASE_URI"]
-        }
-
     # Debug: List all routes
     @app.route("/routes")
     def list_routes():
@@ -69,16 +59,25 @@ def create_app():
             output.append(line)
         return "<pre>" + "\n".join(sorted(output)) + "</pre>"
 
-    # ✅ Serve Flutter web app for all frontend routes
+    # Health check
+    @app.route("/health")
+    def health():
+        return {
+            "status": "healthy",
+            "upload_dir": app.config["UPLOAD_FOLDER"],
+            "database": app.config["SQLALCHEMY_DATABASE_URI"]
+        }
+
+    # Serve Flutter web app for / and unknown routes
     @app.route("/", defaults={"path": ""})
     @app.route("/<path:path>")
-    def serve_frontend(path):
+    def serve_flutter(path):
         if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
             return send_from_directory(app.static_folder, path)
         else:
             return send_from_directory(app.static_folder, "index.html")
 
-    # ⚠️ Only auto-create tables in development
+    # ⚠️ Don’t auto-create tables on every startup in production
     if os.getenv("FLASK_ENV") == "development":
         with app.app_context():
             db.create_all()
@@ -92,6 +91,7 @@ def create_app():
 if __name__ == "__main__":
     app = create_app()
     app.run(host="0.0.0.0", port=5000, debug=True)
+
 
 
 
