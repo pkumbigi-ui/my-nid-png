@@ -9,10 +9,10 @@ import 'user_track_application_page.dart';
 class NewsService {
   static List<String> getNewsHeadlines() {
     return [
-      "PIF leaders plant special trees to mark their attendance at PNG’s 50th Independence Anniversary",
+      "PIF leaders plant special trees to mark their attendance at PNG's 50th Independence Anniversary",
       "Prime Minister welcomes Duke of Edinburgh and Global Leaders at 50th Independence Gala",
-      "People’s Balus touches down at Jackson’s International",
-      "Nation on edge, Experts warn of “vicious spiral” in political violence",
+      "People's Balus touches down at Jackson's International",
+      "Nation on edge, Experts warn of vicious spiral in political violence",
       "Kokote to watch NRL grand final as parting gift",
     ];
   }
@@ -31,7 +31,7 @@ class _NewsCardSectionState extends State<NewsCardSection> {
 
   final List<Map<String, String>> newsCards = [
     {
-      "title": "PIF leaders plant special trees to mark their attendance at PNG’s 50th Independence Anniversary",
+      "title": "PIF leaders plant special trees to mark their attendance at PNG's 50th Independence Anniversary",
       "description":
       "New centers now operational in Port Moresby, Lae, and Madang to improve access.",
       "image": "assets/images/news_postcourier1.png",
@@ -45,14 +45,14 @@ class _NewsCardSectionState extends State<NewsCardSection> {
       "url": "https://www.postcourier.com.pg/"
     },
     {
-      "title": "People’s Balus touches down at Jackson’s International",
+      "title": "People's Balus touches down at Jackson's International",
       "description":
       "The People's Balus has landed at Jackson's International Airport. The plane was officially welcomed with a formal water salute.",
       "image": "assets/images/news_postcourier3.png",
       "url": "https://www.postcourier.com.pg/"
     },
     {
-      "title": "Nation on edge, Experts warn of “vicious spiral” in political violence",
+      "title": "Nation on edge, Experts warn of vicious spiral in political violence",
       "description":
       "WASHINGTON: The assassination of right-wing influencer Charlie Kirk marks a watershed moment in a surge of US political violence, one that some experts fear will inflame an already-fractured country and inspire more unrest.",
       "image": "assets/images/news_postcourier4.png",
@@ -449,6 +449,104 @@ class _UserDashboardState extends State<UserDashboard> {
     }
   }
 
+  Widget _serviceCard({
+    required String title,
+    required String description,
+    required String linkText,
+    required VoidCallback onTap,
+    required IconData icon,
+    required Color iconColor,
+  }) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 666),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.shade800),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(height: 5, color: Colors.green),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Icon container
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: iconColor.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: iconColor.withOpacity(0.3), width: 2),
+                    ),
+                    child: Icon(icon, color: iconColor, size: 28),
+                  ),
+                  const SizedBox(width: 16),
+                  // Text content
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        InkWell(
+                          onTap: onTap,
+                          child: Text(
+                            title,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(description, style: const TextStyle(fontSize: 14)),
+                        const SizedBox(height: 8),
+                        InkWell(
+                          onTap: onTap,
+                          child: Container(
+                            width: 140,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [Colors.blue.shade700, Colors.blue.shade900],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                              ),
+                              borderRadius: BorderRadius.circular(6),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.9),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: Text(
+                                linkText,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -706,6 +804,8 @@ class _UserDashboardState extends State<UserDashboard> {
                                   description:
                                   "Submit your details and documents online to start your NID application instantly.",
                                   linkText: "Apply Now",
+                                  icon: Icons.app_registration,
+                                  iconColor: Colors.green,
                                   onTap: () {
                                     _navigateWithDelay(const ApplyFormPage());
                                   },
@@ -716,6 +816,8 @@ class _UserDashboardState extends State<UserDashboard> {
                                   description:
                                   "Recently applied for NID? Check if your NID is ready or updated.",
                                   linkText: "Check Status",
+                                  icon: Icons.track_changes,
+                                  iconColor: Colors.blue,
                                   onTap: () {
                                     _navigateWithDelay(
                                         const UserTrackApplicationPage(userId: 123));
@@ -727,6 +829,8 @@ class _UserDashboardState extends State<UserDashboard> {
                                   description:
                                   "View important updates and alerts from MyNID PNG.",
                                   linkText: "Tap Here",
+                                  icon: Icons.notifications_active,
+                                  iconColor: Colors.orange,
                                   onTap: () {
                                     setState(() {
                                       _isLoading = true;
@@ -747,6 +851,8 @@ class _UserDashboardState extends State<UserDashboard> {
                                   description:
                                   "If your NID card is lost or stolen, report it immediately.",
                                   linkText: "Click Here To Report",
+                                  icon: Icons.report_problem,
+                                  iconColor: Colors.red,
                                   onTap: () {
                                     setState(() {
                                       _isLoading = true;
@@ -767,6 +873,8 @@ class _UserDashboardState extends State<UserDashboard> {
                                   description:
                                   "Please book an appointment at your nearest NID office to make any changes to your personal data.",
                                   linkText: "Book Now",
+                                  icon: Icons.calendar_today,
+                                  iconColor: Colors.purple,
                                   onTap: () {
                                     setState(() {
                                       _isLoading = true;
@@ -1277,82 +1385,6 @@ class _UserDashboardState extends State<UserDashboard> {
             },
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _serviceCard({
-    required String title,
-    required String description,
-    required String linkText,
-    required VoidCallback onTap,
-  }) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 666),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade800),
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(height: 5, color: Colors.green),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  InkWell(
-                    onTap: onTap,
-                    child: Text(
-                      title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(description, style: const TextStyle(fontSize: 14)),
-                  const SizedBox(height: 8),
-                  InkWell(
-                    onTap: onTap,
-                    child: Container(
-                      width: 140,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Colors.blue.shade700, Colors.blue.shade900],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
-                        borderRadius: BorderRadius.circular(6),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.9),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Text(
-                          linkText,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
